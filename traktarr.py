@@ -181,7 +181,6 @@ def show(
         folder=None,
         no_search=False,
 ):
-
     from media.sonarr import Sonarr
     from media.trakt import Trakt
     from helpers import sonarr as sonarr_helper
@@ -365,7 +364,6 @@ def shows(
         remove_rejected_from_recommended=False,
         dry_run=False,
 ):
-
     from media.sonarr import Sonarr
     from media.trakt import Trakt
     from helpers import str as misc_str
@@ -728,7 +726,6 @@ def movie(
         minimum_availability=None,
         no_search=False,
 ):
-
     from media.radarr import Radarr
     from media.trakt import Trakt
 
@@ -886,7 +883,6 @@ def movies(
         remove_rejected_from_recommended=False,
         dry_run=False,
 ):
-
     from media.radarr import Radarr
     from media.trakt import Trakt
     from helpers import misc as misc_helper
@@ -1190,7 +1186,8 @@ def movies(
 
                         log.info("ADDED: \'%s (%s)\'", movie_title, movie_year)
                         if notifications:
-                            callback_notify({'event': 'add_movie', 'list_type': list_type, 'movie': sorted_movie['movie']})
+                            callback_notify(
+                                {'event': 'add_movie', 'list_type': list_type, 'movie': sorted_movie['movie']})
                         added_movies += 1
                     else:
                         log.error("FAILED ADDING: \'%s (%s)\'", movie_title, movie_year)
@@ -1293,7 +1290,6 @@ def automatic_shows(
         notifications=False,
         ignore_blacklist=False,
 ):
-
     from media.trakt import Trakt
 
     total_shows_added = 0
@@ -1426,7 +1422,6 @@ def automatic_movies(
         ignore_blacklist=False,
         rotten_tomatoes=None,
 ):
-
     from media.trakt import Trakt
 
     total_movies_added = 0
@@ -1590,7 +1585,6 @@ def run(
         no_notifications=False,
         ignore_blacklist=False,
 ):
-
     log.info("Automatic mode is now running.")
 
     # send notification
@@ -1634,6 +1628,9 @@ def run(
         try:
             # Sleep until next run
             log.info("Next job at %s", schedule.next_run())
+            # send notification
+            if not no_notifications and cfg.notifications.verbose:
+                notify.send(message="Next job at {}".format(schedule.next_run())),
             time.sleep(max(schedule.idle_seconds(), 0))
             # Check jobs to run
             schedule.run_pending()
