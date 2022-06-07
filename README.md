@@ -2,8 +2,8 @@
 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-blue.svg?style=flat-square)](https://www.python.org/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%203-blue.svg?style=flat-square)](https://github.com/l3uddz/traktarr/blob/master/LICENSE.md)
-[![last commit (develop)](https://img.shields.io/github/last-commit/l3uddz/traktarr/develop.svg?colorB=177DC1&label=Last%20Commit&style=flat-square)](https://github.com/l3uddz/traktarr/commits/develop)
-[![Discord](https://img.shields.io/discord/381077432285003776.svg?colorB=177DC1&label=Discord&style=flat-square)](https://discord.io/cloudbox)
+[![last commit (master)](https://img.shields.io/github/last-commit/l3uddz/traktarr/master.svg?colorB=177DC1&label=Last%20Commit&style=flat-square)](https://github.com/l3uddz/traktarr/commits/master)
+[![Discord](https://img.shields.io/discord/853755447970758686.svg?colorB=177DC1&label=Discord&style=flat-square)](https://discord.gg/ugfKXpFND8)
 [![Contributing](https://img.shields.io/badge/Contributing-gray.svg?style=flat-square)](CONTRIBUTING.md)
 [![Donate](https://img.shields.io/badge/Donate-gray.svg?style=flat-square)](DONATIONS.md)
 
@@ -334,6 +334,7 @@ You can repeat this process for as many users as you like.
     "language": "English",
     "quality": "HD-1080p",
     "root_folder": "/tv/",
+    "season_folder": true,
     "tags": [],
     "url": "http://localhost:8989/"
   },
@@ -960,7 +961,7 @@ Radarr configuration.
 
 `minimum_availability` - The minimum availability the movies are set to.
 
-  - Choices are `announced`, `in_cinemas`, `released` (Physical/Web), or `predb`.
+  - Choices are `announced`, `in_cinemas` or `released` (Physical/Web).
 
   - Default is `released` (Physical/Web).
 
@@ -981,6 +982,7 @@ Sonarr configuration.
   "language": "English",
   "quality": "HD-1080p",
   "root_folder": "/tv/",
+  "season_folder": true,
   "tags": [],
   "url": "http://localhost:8989"
 },
@@ -993,6 +995,8 @@ Sonarr configuration.
 `quality` - Quality Profile that TV shows are assigned to.
 
 `root_folder` - Root folder for TV shows.
+
+`season_folder` - Sort episodes into season folders.
 
 `tags` - Assign tags to shows. Tags need to be created in Sonarr first.
 
@@ -1165,7 +1169,7 @@ Usage: traktarr movie [OPTIONS]
 Options:
   -id, --movie-id TEXT  Trakt Movie ID.  [required]
   -f, --folder TEXT     Add movie with this root folder to Radarr.
-  -ma, --minimum-availability [announced|in_cinemas|released|predb]
+  -ma, --minimum-availability [announced|in_cinemas|released]
                         Add movies with this minimum availability to Radarr.
   --no-search           Disable search when adding movie to Radarr.
   --help                Show this message and exit.
@@ -1179,7 +1183,7 @@ Options:
 
 `minimum_availability` - The minimum availability the movies are set to.
 
-   - Choices are `announced`, `in_cinemas`, `released` (Physical/Web), or `predb`.
+   - Choices are `announced`, `in_cinemas` or `released` (Physical/Web).
 
    - Default is `released` (Physical/Web).
 
@@ -1213,7 +1217,7 @@ Options:
                                   specified as a comma-separated list. Use 'ignore' to add movies
                                   from any genre, including ones with no genre specified.
   -f, --folder TEXT               Add movies with this root folder to Radarr.
-  -ma, --minimum-availability [announced|in_cinemas|released|predb]
+  -ma, --minimum-availability [announced|in_cinemas|released]
                                   Add movies with this minimum availability to Radarr. Default is
                                   'released'.
   -p, --person TEXT               Only add movies from this person (e.g. actor) to Radarr. Only
@@ -1287,7 +1291,7 @@ Choices are: `anticipated`, `trending`, `popular`, `boxoffice`, `watched`, `play
 
 `minimum_availability` - The minimum availability the movies are set to.
 
-  - Choices are `announced`, `in_cinemas`, `released` (Physical/Web), or `predb`.
+  - Choices are `announced`, `in_cinemas` or `released` (Physical/Web).
 
   - Default is `released` (Physical/Web).
 

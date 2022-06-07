@@ -111,7 +111,7 @@ def validate_pvr(pvr, pvr_type, notifications):
 def get_quality_profile_id(pvr, quality_profile):
     # retrieve profile id for requested quality profile
     quality_profile_id = pvr.get_quality_profile_id(quality_profile)
-    if not quality_profile_id or not quality_profile_id > 0:
+    if not quality_profile_id or quality_profile_id <= 0:
         log.error("Aborting due to failure to retrieve Quality Profile ID for: %s", quality_profile)
         exit()
     log.info("Retrieved Quality Profile ID for \'%s\': %d", quality_profile, quality_profile_id)
@@ -121,7 +121,7 @@ def get_quality_profile_id(pvr, quality_profile):
 def get_language_profile_id(pvr, language_profile):
     # retrieve profile id for requested language profile
     language_profile_id = pvr.get_language_profile_id(language_profile)
-    if not language_profile_id or not language_profile_id > 0:
+    if not language_profile_id or language_profile_id <= 0:
         log.error("No Language Profile ID for: %s", language_profile)
     else:
         log.info("Retrieved Language Profile ID for \'%s\': %d", language_profile, language_profile_id)
@@ -256,6 +256,7 @@ def show(
             quality_profile_id,
             language_profile_id,
             cfg.sonarr.root_folder,
+            cfg.sonarr.season_folder,
             tag_ids,
             not no_search,
             series_type,
@@ -266,12 +267,11 @@ def show(
                      tag_names)
         else:
             log.info("ADDED: \'%s (%s)\'", series_title, series_year)
+    elif profile_tags is not None:
+        log.error("FAILED ADDING: \'%s (%s)\' with Sonarr Tags: %s", series_title, series_year,
+                  tag_names)
     else:
-        if profile_tags is not None:
-            log.error("FAILED ADDING: \'%s (%s)\' with Sonarr Tags: %s", series_title, series_year,
-                      tag_names)
-        else:
-            log.info("FAILED ADDING: \'%s (%s)\'", series_title, series_year)
+        log.info("FAILED ADDING: \'%s (%s)\'", series_title, series_year)
 
     return
 
@@ -655,6 +655,7 @@ def shows(
                             quality_profile_id,
                             language_profile_id,
                             cfg.sonarr.root_folder,
+                            cfg.sonarr.season_folder,
                             tag_ids,
                             not no_search,
                             series_type,
@@ -714,7 +715,7 @@ def shows(
     help='Add movie with this root folder to Radarr.')
 @click.option(
     '--minimum-availability', '-ma',
-    type=click.Choice(['announced', 'in_cinemas', 'released', 'predb']),
+    type=click.Choice(['announced', 'in_cinemas', 'released']),
     help='Add movies with this minimum availability to Radarr. Default is \'released\'.')
 @click.option(
     '--no-search',
@@ -735,7 +736,7 @@ def movie(
     log.debug('Set root folder to: \'%s\'', cfg['radarr']['root_folder'])
 
     # replace radarr.minimum_availability if minimum_availability is supplied
-    valid_min_avail = ['announced', 'in_cinemas', 'released', 'predb']
+    valid_min_avail = ['announced', 'in_cinemas', 'released']
 
     if minimum_availability:
         cfg['radarr']['minimum_availability'] = minimum_availability
@@ -827,7 +828,7 @@ def movie(
     help='Add movies with this root folder to Radarr.')
 @click.option(
     '--minimum-availability', '-ma',
-    type=click.Choice(['announced', 'in_cinemas', 'released', 'predb']),
+    type=click.Choice(['announced', 'in_cinemas', 'released']),
     help='Add movies with this minimum availability to Radarr. Default is \'released\'.')
 @click.option(
     '--person', '-p',
@@ -954,7 +955,7 @@ def movies(
     log.debug('Set root folder to: \'%s\'', cfg['radarr']['root_folder'])
 
     # replace radarr.minimum_availability if minimum_availability is supplied
-    valid_min_avail = ['announced', 'in_cinemas', 'released', 'predb']
+    valid_min_avail = ['announced', 'in_cinemas', 'released']
 
     if minimum_availability:
         cfg['radarr']['minimum_availability'] = minimum_availability
@@ -1395,7 +1396,7 @@ def automatic_shows(
                     )
 
             if added_shows is None:
-                if not list_type.lower() == 'lists':
+                if list_type.lower() != 'lists':
                     log.info("FAILED ADDING shows from Trakt's \'%s\' list.", list_type)
                 time.sleep(10)
                 continue
@@ -1530,7 +1531,7 @@ def automatic_movies(
                     )
 
             if added_movies is None:
-                if not list_type.lower() == 'lists':
+                if list_type.lower() != 'lists':
                     log.info("FAILED ADDING movies from Trakt's \'%s\' list.", list_type.capitalize())
                 time.sleep(10)
                 continue
